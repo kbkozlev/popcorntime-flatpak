@@ -1,9 +1,6 @@
 # PopcornTime-flatpak
-PopcornTime Flatpak package (unoffical)
-
-## TODO:
-- [ ] Look for a way to allow external players (maybe add patch to use xdg-open)
-- [ ] Setup a basic Gitlab CI Pipeline, which stores the flatpak bundle as an artifact
+PopcornTime Flatpak package (unoffical) version: 0.51 with freedesktop 24.08
+cloned from https://gitlab.com/Preisschild/popcorntime-flatpak
 
 ## Install To System
 
@@ -18,7 +15,7 @@ flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/fl
 3 - Clone the repository
 
 ```
-git clone https://gitlab.com/Preisschild/popcorntime-flatpak
+git clone https://github.com/fastrizwaan/popcorntime-flatpak.git
 cd ./popcorntime-flatpak
 ``` 
 
@@ -32,4 +29,9 @@ flatpak-builder --user --repo=repo --install-deps-from=flathub --force-clean bui
 ```
 flatpak --user remote-add --no-gpg-verify popcorn-time-repo repo
 flatpak --user install popcorn-time-repo org.popcorntime.PopcornTime
+```
+
+6 - Create flatpak-bundle (.flatpak file)
+```
+flatpak build-bundle ~/.local/share/flatpak/repo org.popcorntime.PopcornTime.flatpak org.popcorntime.PopcornTime
 ```
