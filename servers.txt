@@ -1,0 +1,3 @@
+{"key":"customMoviesServer","value":"https://fusme.link/,https://jfper.link/,https://uxert.link/,https;//yrkde.link/","_id":"ImGtEAPrUS1AHfFl"}
+{"key":"customSeriesServer","value":"https://fusme.link/,https://jfper.link/,https://uxert.link/,https;//yrkde.link/","_id":"bB5uaVIhCEkLiAzG"}
+{"key":"customAnimeServer","value":"https://fusme.link/,https://jfper.link/,https://uxert.link/,https;//yrkde.link/","_id":"xkbgBqUc419ZVJ3u"}
