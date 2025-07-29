@@ -1,0 +1,53 @@
+name: Build AppImage (Fedora)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-appimage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Podman
+        uses: redhat-actions/podman-login@v1
+
+      - name: Pull Fedora image and build AppImage
+        run: |
+          podman run --rm -v ${{ github.workspace }}:/workspace:Z \
+            docker.io/library/fedora:latest bash -c '
+              dnf install -y wget fuse glibc-langpack-en desktop-file-utils patchelf \
+                libX11 libXrender libXext libXcursor libXrandr libXfixes libXdamage \
+                libXtst libnss3 libxss alsa-lib libxcb libXcomposite libXinerama \
+                libappindicator-gtk3 xdg-utils unzip
+
+              cd /workspace
+              mkdir -p appimage-build
+              cd appimage-build
+
+              wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+              chmod +x linuxdeploy-x86_64.AppImage
+
+              wget https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
+              chmod +x linuxdeploy-plugin-appimage-x86_64.AppImage
+
+              ./linuxdeploy-x86_64.AppImage \
+                --appdir AppDir \
+                --desktop-file ../your-app.desktop \
+                --icon-file ../your-icon.png \
+                --executable ../your-app-executable \
+                --output appimage \
+                --plugin appimage
+            '
+
+      - name: Upload AppImage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PopcornTime.AppImage
+          path: appimage-build/*.AppImage
