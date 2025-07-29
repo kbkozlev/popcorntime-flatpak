@@ -23,9 +23,9 @@ jobs:
 
             # Install dependencies
             dnf install -y fuse fuse-libs patchelf unzip wget desktop-file-utils \
-              libX11 libXext libXrender libXcursor libXrandr libXfixes libXcomposite \
-              libXdamage libXinerama libxss libnss3 alsa-lib xdg-utils \
-              glibc-langpack-en
+            libX11 libXext libXrender libXcursor libXrandr libXfixes libXcomposite \
+            libXdamage libXinerama libXScrnSaver nss alsa-lib xdg-utils \
+            glibc-langpack-en
 
             # Download linuxdeploy and appimage plugin
             mkdir -p appimage-out
