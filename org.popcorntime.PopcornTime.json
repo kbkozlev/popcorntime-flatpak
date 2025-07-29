@@ -23,8 +23,39 @@
     "--talk-name=org.freedesktop.Flatpak",
     "--command=flatpak-spawn"
   ],
-
   "modules": [
+    {
+      "name": "ffmpeg",
+      "buildsystem": "meson",
+      "builddir": true,
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://ffmpeg.org/releases/ffmpeg-6.0.tar.xz",
+          "sha256": "ab2295c9a64b9e0cb2a8b84b4d9b5b93d0f6bbbe37d00392b448e9c62e2eb76b"
+        }
+      ]
+    },
+    {
+      "name": "mpv",
+      "buildsystem": "meson",
+      "builddir": true,
+      "build-options": {
+        "append-path": "/app/bin"
+      },
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/mpv-player/mpv.git",
+          "tag": "v0.37.0"
+        }
+      ],
+      "build-commands": [
+        "meson setup build --prefix=/app",
+        "ninja -C build",
+        "install -Dm755 build/mpv /app/bin/mpv"
+      ]
+    },
     {
       "name": "popcorntime",
       "buildsystem": "simple",
