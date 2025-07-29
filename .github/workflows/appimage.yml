@@ -48,12 +48,12 @@ jobs:
 
             # Run linuxdeploy from extracted AppImage
             ./linuxdeploy/AppRun \
-              --appdir AppDir \
-              --desktop-file ../your-app.desktop \
-              --icon-file ../your-icon.png \
-              --executable ../Popcorn-Time \
-              --plugin plugin-appimage/AppRun \
-              --output appimage
+            --appdir AppDir \
+            --desktop-file ../your-app.desktop \
+            --icon-file ../your-icon.png \
+            --executable ../Popcorn-Time \
+            --output appimage
+
           '
 
       - name: Upload AppImage artifact
