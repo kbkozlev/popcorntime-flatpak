@@ -61,7 +61,7 @@ jobs:
 
       # Upload the bundle as an artifact
       - name: Upload Flatpak bundle
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: PopcornTime.flatpak
           path: PopcornTime.flatpak
