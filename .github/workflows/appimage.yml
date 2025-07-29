@@ -1,4 +1,4 @@
-name: Build AppImage for Fedora
+name: Build AppImage on Fedora
 
 on:
   push:
@@ -8,43 +8,52 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-appimage:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build AppImage in Fedora container
+      - name: Install Podman
         run: |
-          # Pull Fedora container and mount the repo
+          sudo apt update
+          sudo apt install -y podman
+
+      - name: Build AppImage inside Fedora container
+        run: |
           podman run --rm -v $PWD:/workspace:Z -w /workspace docker.io/library/fedora:latest bash -c '
             set -e
 
             # Install dependencies
-            dnf install -y fuse fuse-libs patchelf unzip wget desktop-file-utils \
-            libX11 libXext libXrender libXcursor libXrandr libXfixes libXcomposite \
-            libXdamage libXinerama libXScrnSaver nss alsa-lib xdg-utils \
-            glibc-langpack-en
+            dnf install -y wget unzip patchelf desktop-file-utils \
+              libX11 libXext libXrender libXcursor libXrandr libXfixes libXcomposite \
+              libXdamage libXinerama libXScrnSaver nss alsa-lib xdg-utils \
+              glibc-langpack-en
 
-            # Download linuxdeploy and appimage plugin
+            # Prepare build directory
             mkdir -p appimage-out
             cd appimage-out
 
-            wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+            # Download linuxdeploy and plugin
+            wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
             chmod +x linuxdeploy-x86_64.AppImage
+            ./linuxdeploy-x86_64.AppImage --appimage-extract
+            mv squashfs-root linuxdeploy
 
-            wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
+            wget https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
             chmod +x linuxdeploy-plugin-appimage-x86_64.AppImage
+            ./linuxdeploy-plugin-appimage-x86_64.AppImage --appimage-extract
+            mv squashfs-root plugin-appimage
 
-            # Build the AppImage (adjust for your app)
-            ./linuxdeploy-x86_64.AppImage \
+            # Run linuxdeploy from extracted AppImage
+            ./linuxdeploy/AppRun \
               --appdir AppDir \
               --desktop-file ../your-app.desktop \
               --icon-file ../your-icon.png \
               --executable ../Popcorn-Time \
-              --output appimage \
-              --plugin appimage
+              --plugin plugin-appimage/AppRun \
+              --output appimage
           '
 
       - name: Upload AppImage artifact
