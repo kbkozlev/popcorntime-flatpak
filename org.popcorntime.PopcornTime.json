@@ -14,12 +14,16 @@
     "--socket=wayland",
     "--device=dri",
     "--socket=pulseaudio",
+    "--filesystem=host",
     "--filesystem=xdg-run/tmp:rw",
     "--filesystem=/tmp/Popcorn Time:create",
     "--talk-name=org.freedesktop.Notifications",
     "--own-name=com.nw-builder.popcorn-time",
-    "--own-name=org.mpris.MediaPlayer2.chromium.*"
+    "--own-name=org.mpris.MediaPlayer2.chromium.*",
+    "--talk-name=org.freedesktop.Flatpak",
+    "--command=flatpak-spawn"
   ],
+
   "modules": [
     {
       "name": "popcorntime",
