@@ -1,40 +1,65 @@
+# This is a basic workflow to build a Flatpak using GitHub Actions
+
 name: Build Flatpak
 
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on push or pull request events for the "main" branch
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
+    branches: [ "main" ]
 
+  # Allows manual trigger from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs
 jobs:
   build:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up Flatpak
+      # Install dependencies
+      - name: Install Flatpak tools
         run: |
           sudo apt update
-          sudo apt install -y flatpak flatpak-builder wget gnome-desktop-testing
+          sudo apt install -y flatpak flatpak-builder desktop-file-utils wget jq
 
-          # Add Flathub
+      # Add Flathub and install Flatpak runtimes
+      - name: Set up Flatpak environment
+        run: |
           flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
-          # Install runtimes (adjust if needed)
-          flatpak install -y --noninteractive flathub \
+          flatpak install --user --noninteractive flathub \
             org.freedesktop.Platform//23.08 \
             org.freedesktop.Sdk//23.08 \
             org.electronjs.Electron2.BaseApp//23.08
 
-      - name: Build Flatpak
+      # Fix expected Flatpak directories
+      - name: Ensure Flatpak sandbox paths exist
         run: |
-          flatpak-builder --force-clean --user build-dir org.popcorntime.PopcornTime.json
+          mkdir -p ~/.local/share/flatpak/exports/share
+          mkdir -p ~/.var/app
 
-      - name: Bundle Flatpak
+      # Build the Flatpak
+      - name: Build Popcorn Time Flatpak
         run: |
-          flatpak build-bundle build-dir PopcornTime.flatpak org.popcorntime.PopcornTime
+          flatpak-builder --force-clean --user \
+            --install \
+            --repo=repo \
+            build-dir \
+            org.popcorntime.PopcornTime.json
 
+      # Bundle it into a .flatpak file
+      - name: Create Flatpak bundle
+        run: |
+          flatpak build-bundle repo PopcornTime.flatpak org.popcorntime.PopcornTime
+
+      # Upload the bundle as an artifact
       - name: Upload Flatpak bundle
         uses: actions/upload-artifact@v3
         with:
