@@ -25,13 +25,22 @@
   ],
   "modules": [
     {
-      "name": "ffmpeg",
-      "buildsystem": "meson",
-      "builddir": true,
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://ffmpeg.org/releases/ffmpeg-6.0.tar.xz",
+  "name": "ffmpeg",
+  "buildsystem": "simple",
+  "build-options": {
+    "env": {
+      "PKG_CONFIG_PATH": "/app/lib/pkgconfig:/usr/lib/pkgconfig"
+    }
+  },
+  "build-commands": [
+    "./configure --prefix=/app --disable-debug --disable-doc",
+    "make -j$(nproc)",
+    "make install"
+  ],
+  "sources": [
+    {
+      "type": "archive",
+      "url": "https://ffmpeg.org/releases/ffmpeg-6.0.tar.xz",
           "sha256": "57be87c22d9b49c112b6d24bc67d42508660e6b718b3db89c44e47e289137082"
         }
       ]
