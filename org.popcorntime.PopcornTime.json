@@ -28,13 +28,7 @@
       "name": "external-players-wrappers",
       "buildsystem": "simple",
       "build-commands": [
-        "for player in mpv vlc smplayer celluloid; do \\",
-        "  echo '#!/bin/sh' > $player; \\",
-        "  echo 'flatpak-spawn --host which $player >/dev/null 2>&1 || exit 0' >> $player; \\",
-        "  echo 'exec flatpak-spawn --host $player \"$@\"' >> $player; \\",
-        "  chmod +x $player; \\",
-        "  install -Dm755 $player /app/bin/$player; \\",
-        "done"
+        "for player in mpv vlc smplayer celluloid; do echo '#!/bin/sh' > $player; echo 'flatpak-spawn --host which $player >/dev/null 2>&1 || exit 0' >> $player; echo 'exec flatpak-spawn --host $player \"$@\"' >> $player; chmod +x $player; install -Dm755 $player /app/bin/$player; done"
       ],
       "sources": []
     },
