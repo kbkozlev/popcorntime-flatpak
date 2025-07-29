@@ -25,18 +25,29 @@
   ],
   "modules": [
     {
-  "name": "ffmpeg",
-  "buildsystem": "simple",
-  "build-options": {
-    "env": {
-      "PKG_CONFIG_PATH": "/app/lib/pkgconfig:/usr/lib/pkgconfig"
-    }
-  },
-  "build-commands": [
-  "./configure --prefix=/app --disable-debug --disable-doc --disable-inline-asm",
-  "make -j$(nproc)",
-  "make install"
-],
+      "name": "libplacebo",
+      "buildsystem": "meson",
+      "builddir": true,
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://code.videolan.org/videolan/libplacebo.git",
+        }
+      ]
+    },
+    {
+      "name": "ffmpeg",
+      "buildsystem": "simple",
+      "build-options": {
+        "env": {
+          "PKG_CONFIG_PATH": "/app/lib/pkgconfig:/usr/lib/pkgconfig"
+        }
+      },
+      "build-commands": [
+      "./configure --prefix=/app --disable-debug --disable-doc --disable-inline-asm",
+      "make -j$(nproc)",
+      "make install"
+    ],
   "sources": [
     {
       "type": "archive",
