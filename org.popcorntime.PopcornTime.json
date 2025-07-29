@@ -28,18 +28,16 @@
       "name": "external-players-wrappers",
       "buildsystem": "simple",
       "build-commands": [
-        "echo '#!/bin/sh' > mpv",
-        "echo 'exec flatpak-spawn --host mpv \"$@\"' >> mpv",
-        "chmod +x mpv",
-        "install -Dm755 mpv /app/bin/mpv",
-        "echo '#!/bin/sh' > vlc",
-        "echo 'exec flatpak-spawn --host vlc \"$@\"' >> vlc",
-        "chmod +x vlc",
-        "install -Dm755 vlc /app/bin/vlc"
+        "for player in mpv vlc smplayer celluloid; do \\",
+        "  echo '#!/bin/sh' > $player; \\",
+        "  echo 'flatpak-spawn --host which $player >/dev/null 2>&1 || exit 0' >> $player; \\",
+        "  echo 'exec flatpak-spawn --host $player \"$@\"' >> $player; \\",
+        "  chmod +x $player; \\",
+        "  install -Dm755 $player /app/bin/$player; \\",
+        "done"
       ],
       "sources": []
     },
-
     {
       "name": "popcorntime",
       "buildsystem": "simple",
