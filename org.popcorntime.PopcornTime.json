@@ -33,10 +33,10 @@
     }
   },
   "build-commands": [
-    "./configure --prefix=/app --disable-debug --disable-doc",
-    "make -j$(nproc)",
-    "make install"
-  ],
+  "./configure --prefix=/app --disable-debug --disable-doc --disable-inline-asm",
+  "make -j$(nproc)",
+  "make install"
+],
   "sources": [
     {
       "type": "archive",
