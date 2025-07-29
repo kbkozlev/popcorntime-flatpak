@@ -28,13 +28,8 @@
       "name": "external-players-wrappers",
       "buildsystem": "simple",
       "build-commands": [
-        "for player in mpv vlc smplayer celluloid; do \\",
-        "  echo '#!/bin/sh' > $player; \\",
-        "  echo 'flatpak-spawn --host --env=DISPLAY=\"$DISPLAY\" --env=WAYLAND_DISPLAY=\"$WAYLAND_DISPLAY\" --env=XDG_RUNTIME_DIR=\"$XDG_RUNTIME_DIR\" \\$(command -v $player) \"$@\"' >> $player; \\",
-        "  chmod +x $player; \\",
-        "  install -Dm755 $player /app/bin/$player; \\",
-        "done"
-      ],
+      "for player in mpv vlc smplayer celluloid; do echo '#!/bin/sh' > $player; echo 'flatpak-spawn --host --env=DISPLAY=$DISPLAY --env=WAYLAND_DISPLAY=$WAYLAND_DISPLAY --env=XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR $(command -v $player) \"$@\"' >> $player; chmod +x $player; install -Dm755 $player /app/bin/$player; done"
+    ],
       "sources": []
     },
     {
