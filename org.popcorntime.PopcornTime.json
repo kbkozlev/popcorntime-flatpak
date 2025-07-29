@@ -25,57 +25,21 @@
   ],
   "modules": [
     {
-      "name": "libplacebo",
-      "buildsystem": "meson",
-      "builddir": true,
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://code.videolan.org/videolan/libplacebo.git",
-        }
-      ]
-    },
-    {
-      "name": "ffmpeg",
+      "name": "external-players-wrappers",
       "buildsystem": "simple",
-      "build-options": {
-        "env": {
-          "PKG_CONFIG_PATH": "/app/lib/pkgconfig:/usr/lib/pkgconfig"
-        }
-      },
       "build-commands": [
-      "./configure --prefix=/app --disable-debug --disable-doc --disable-inline-asm",
-      "make -j$(nproc)",
-      "make install"
-    ],
-  "sources": [
-    {
-      "type": "archive",
-      "url": "https://ffmpeg.org/releases/ffmpeg-7.1.tar.xz",
-          "sha256": "40973d44970dbc83ef302b0609f2e74982be2d85916dd2ee7472d30678a7abe6"
-        }
-      ]
-    },
-    {
-      "name": "mpv",
-      "buildsystem": "meson",
-      "builddir": true,
-      "build-options": {
-        "append-path": "/app/bin"
-      },
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://github.com/mpv-player/mpv.git",
-          "tag": "v0.39.0"
-        }
+        "echo '#!/bin/sh' > mpv",
+        "echo 'exec flatpak-spawn --host mpv \"$@\"' >> mpv",
+        "chmod +x mpv",
+        "install -Dm755 mpv /app/bin/mpv",
+        "echo '#!/bin/sh' > vlc",
+        "echo 'exec flatpak-spawn --host vlc \"$@\"' >> vlc",
+        "chmod +x vlc",
+        "install -Dm755 vlc /app/bin/vlc"
       ],
-      "build-commands": [
-        "meson setup build --prefix=/app",
-        "ninja -C build",
-        "install -Dm755 build/mpv /app/bin/mpv"
-      ]
+      "sources": []
     },
+
     {
       "name": "popcorntime",
       "buildsystem": "simple",
