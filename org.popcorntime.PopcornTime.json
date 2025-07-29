@@ -32,7 +32,7 @@
         {
           "type": "archive",
           "url": "https://ffmpeg.org/releases/ffmpeg-6.0.tar.xz",
-          "sha256": "ab2295c9a64b9e0cb2a8b84b4d9b5b93d0f6bbbe37d00392b448e9c62e2eb76b"
+          "sha256": "57be87c22d9b49c112b6d24bc67d425086660e6b718bd89c44e47e289137082"
         }
       ]
     },
